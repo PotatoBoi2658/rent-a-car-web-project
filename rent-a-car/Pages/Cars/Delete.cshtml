@@ -1,0 +1,44 @@
+@page "{id}"
+@using rent_a_car.Pages.Cars
+@model DeleteCarModel
+@{
+    ViewData["Title"] = "Delete Car";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Confirm Deletion</h4>
+                <p>Are you sure you want to delete this car?</p>
+            </div>
+
+            @if (Model.Car != null)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Car.FullName</h5>
+                        <p class="card-text">
+                            <strong>Year:</strong> @Model.Car.Year<br>
+                            <strong>Seats:</strong> @Model.Car.PassengerSeats<br>
+                            <strong>Price/Day:</strong> $@Model.Car.PricePerDay.ToString("F2")<br>
+                            @if (!string.IsNullOrEmpty(Model.Car.Description))
+                            {
+                                <strong>Description:</strong> @Model.Car.Description
+                            }
+                        </p>
+                    </div>
+                </div>
+
+                <form method="post" class="mt-3">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a href="/Cars" class="btn btn-secondary">Cancel</a>
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-warning">Car not found.</div>
+            }
+        </div>
+    </div>
+</div>

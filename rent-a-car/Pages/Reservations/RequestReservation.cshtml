@@ -1,0 +1,50 @@
+﻿@page
+@using rent_a_car.Pages.Reservations
+@model RequestReservationModel
+@{
+    ViewData["Title"] = "Request Reservation";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @if (Model.Car != null)
+                    {
+                        <form method="post">
+                            <input type="hidden" asp-for="CarId" />
+                            <input type="hidden" asp-for="StartDate" />
+                            <input type="hidden" asp-for="EndDate" />
+
+                            <div class="mb-3">
+                                <strong>@Model.Car.FullName</strong><br />
+                                <span class="text-muted">(@Model.Car.Year, @Model.Car.PassengerSeats seats)</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>From:</strong> @Model.StartDate.ToString("yyyy-MM-dd")<br />
+                                <strong>To:</strong> @Model.EndDate.ToString("yyyy-MM-dd")
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Message" class="form-label">Notes (optional)</label>
+                                <textarea asp-for="Message" class="form-control"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Submit Request</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">Car not found.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

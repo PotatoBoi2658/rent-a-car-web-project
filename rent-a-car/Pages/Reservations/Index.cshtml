@@ -1,0 +1,98 @@
+﻿@page
+@using rent_a_car.Pages.Reservations
+@model ReservationsIndexModel
+@{
+    ViewData["Title"] = "My Reservations";
+}
+
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <div class="col text-end">
+            <a asp-page="CheckAvailability" class="btn btn-primary">Check Availability</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (User.IsInRole("Administrator"))
+    {
+        <h3>Pending Requests</h3>
+        @if (Model.PendingReservations.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Car</th>
+                        <th>User</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var r in Model.PendingReservations)
+                {
+                    <tr>
+                        <td>@r.Car.FullName</td>
+                        <td>@r.User.UserName</td>
+                        <td>@r.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>@r.EndDate.ToString("yyyy-MM-dd")</td>
+                        <td>@r.Status</td>
+                        <td>
+                            <form method="post" asp-page-handler="Approve" asp-route-id="@r.Id" style="display:inline">
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                            <form method="post" asp-page-handler="Reject" asp-route-id="@r.Id" style="display:inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info">No pending requests.</div>
+        }
+    }
+
+    <h3 class="mt-4">All My Reservations</h3>
+    @if (Model.Reservations.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Car</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var r in Model.Reservations)
+            {
+                <tr>
+                    <td>@r.Car.FullName</td>
+                    <td>@r.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@r.EndDate.ToString("yyyy-MM-dd")</td>
+                    <td>@r.Status</td>
+                    <td>$@r.TotalPrice.ToString("F2")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No reservations found.</div>
+    }
+</div>

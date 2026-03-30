@@ -1,0 +1,94 @@
+﻿@page
+@using rent_a_car.Pages.Reservations
+@model CheckAvailabilityModel
+@{
+    ViewData["Title"] = "Check Car Availability";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">@ViewData["Title"]</h1>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Input.StartDate" class="form-label">Start Date</label>
+                                    <input asp-for="Input.StartDate" class="form-control" type="date" required />
+                                    <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Input.EndDate" class="form-label">End Date</label>
+                                    <input asp-for="Input.EndDate" class="form-control" type="date" required />
+                                    <span asp-validation-for="Input.EndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            🔍 Check Availability
+                        </button>
+                    </form>
+
+                    @if (Model.CheckedAvailability)
+                    {
+                        <hr />
+                        @if (Model.AvailableCars.Any())
+                        {
+                            <h3 class="mt-4 mb-3">📅 Available Cars</h3>
+                            <div class="row g-3">
+                                @foreach (var car in Model.AvailableCars)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@car.FullName</h5>
+                                                <div class="mb-3">
+                                                    <small class="text-muted">
+                                                        <strong>Year:</strong> @car.Year | 
+                                                        <strong>Seats:</strong> @car.PassengerSeats
+                                                    </small>
+                                                </div>
+                                                @if (!string.IsNullOrEmpty(car.Description))
+                                                {
+                                                    <p class="card-text text-muted small">@car.Description</p>
+                                                }
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <strong class="h6 mb-0">${@car.PricePerDay.ToString("F2")}/day</strong>
+                                                    <a asp-page="/Reservations/RequestReservation"
+                                                       asp-route-carId="@car.Id"
+                                                       asp-route-startDate="@Model.Input.StartDate.ToString("yyyy-MM-dd")"
+                                                       asp-route-endDate="@Model.Input.EndDate.ToString("yyyy-MM-dd")"
+                                                       class="btn btn-success btn-sm">Request This Car</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning mt-4">
+                                <h5>⚠️ No Cars Available</h5>
+                                <p>Unfortunately, no cars are available for your selected dates. Please try different dates.</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mt-4">Select your desired dates and check availability to see available cars.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

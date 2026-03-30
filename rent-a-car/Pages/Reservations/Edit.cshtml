@@ -1,0 +1,58 @@
+@page "{id}"
+@using rent_a_car.Pages.Reservations
+@model EditReservationModel
+@{
+    ViewData["Title"] = "Edit Reservation";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1>@ViewData["Title"]</h1>
+            <hr />
+
+            @if (Model.Reservation != null)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Reservation.Car.FullName</h5>
+                        <p class="card-text">
+                            <strong>Price/Day:</strong> $@Model.Reservation.Car.PricePerDay.ToString("F2")
+                        </p>
+                    </div>
+                </div>
+
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="Input.Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Input.StartDate" class="form-label"></label>
+                        <input asp-for="Input.StartDate" class="form-control" type="date" />
+                        <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.EndDate" class="form-label"></label>
+                        <input asp-for="Input.EndDate" class="form-control" type="date" />
+                        <span asp-validation-for="Input.EndDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Update Reservation</button>
+                        <a href="/Reservations" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-warning">Reservation not found.</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,77 @@
+﻿@page
+@using rent_a_car.Pages.Reservations
+@model CreateReservationModel
+@{
+    ViewData["Title"] = "Make a Reservation";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.StartDate" class="form-label">Start Date</label>
+                            <input asp-for="Input.StartDate" class="form-control" type="date" required />
+                            <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.EndDate" class="form-label">End Date</label>
+                            <input asp-for="Input.EndDate" class="form-control" type="date" required />
+                            <span asp-validation-for="Input.EndDate" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" formaction="/Reservations/Create?handler=CheckAvailability" class="btn btn-info w-100 mb-3">
+                            🔍 Check Availability
+                        </button>
+
+                        @if (Model.AvailableCars.Any())
+                        {
+                            <hr />
+                            <h3 class="mt-4">Available Cars</h3>
+                            
+                            <div class="mb-3">
+                                <label asp-for="Input.CarId" class="form-label">Select a Car</label>
+                                <select asp-for="Input.CarId" class="form-select" required>
+                                    <option value="">-- Choose a car --</option>
+                                    @foreach (var car in Model.AvailableCars)
+                                    {
+                                        <option value="@car.Id">@car.FullName - $@car.PricePerDay.ToString("F2")/day</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.CarId" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">✓ Create Reservation</button>
+                                <a href="/Cars" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        }
+                        else if (Model.CheckedAvailability && !Model.AvailableCars.Any())
+                        {
+                            <div class="alert alert-warning mt-3">
+                                <strong>No cars available</strong> for the selected dates. Please try different dates.
+                            </div>
+                            <a href="/Cars" class="btn btn-secondary w-100">Back to Cars</a>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center mt-3">Select dates and check availability to see available cars.</p>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

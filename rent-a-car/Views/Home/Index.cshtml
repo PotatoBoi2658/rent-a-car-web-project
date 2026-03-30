@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Rent a Car - Home";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <h1>🚗 Welcome to Rent-a-Car</h1>
+        <p>Your trusted partner for hassle-free car rentals</p>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-page="/Cars/Index" class="btn btn-light cta-button cta-button-primary me-2">Browse Cars</a>
+            <a asp-page="/Reservations/Index" class="btn btn-outline-light cta-button">My Reservations</a>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-light cta-button cta-button-primary me-2">Login</a>
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-light cta-button">Register</a>
+        }
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Our Services</h2>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Browse Cars -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card">
+                <div class="card-body text-center">
+                    <span class="feature-icon">🚘</span>
+                    <h5 class="card-title">Browse Available Cars</h5>
+                    <p class="card-text">Explore our wide selection of vehicles for every need and budget.</p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-page="/Cars/Index" class="btn btn-primary">View Cars</a>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Login to Browse</a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Make Reservations -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card">
+                <div class="card-body text-center">
+                    <span class="feature-icon">📅</span>
+                    <h5 class="card-title">Make a Reservation</h5>
+                    <p class="card-text">Reserve your perfect car for specific dates with just a few clicks.</p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-page="/Reservations/Create" class="btn btn-primary">Reserve Now</a>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Login to Reserve</a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Reservations -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card feature-card">
+                <div class="card-body text-center">
+                    <span class="feature-icon">📋</span>
+                    <h5 class="card-title">Manage Reservations</h5>
+                    <p class="card-text">View, edit, and manage all your current and past reservations.</p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-page="/Reservations/Index" class="btn btn-primary">My Reservations</a>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Login</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Section -->
+    @if (User.IsInRole("Administrator"))
+    {
+        <div class="row g-4 mb-5">
+            <div class="col-md-12">
+                <h2 class="text-center mb-4">Administration</h2>
+            </div>
+
+            <!-- Manage Cars -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <span class="feature-icon">🔧</span>
+                        <h5 class="card-title">Manage Fleet</h5>
+                        <p class="card-text">Add, edit, and remove vehicles from your fleet.</p>
+                        <a asp-page="/Cars/Index" class="btn btn-warning">Manage Cars</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approve Reservations -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <span class="feature-icon">✅</span>
+                        <h5 class="card-title">Approve Requests</h5>
+                        <p class="card-text">Review and approve pending reservation requests.</p>
+                        <a asp-page="/Reservations/Index" class="btn btn-warning">Review Requests</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <span class="feature-icon">👥</span>
+                        <h5 class="card-title">User Management</h5>
+                        <p class="card-text">Manage user accounts and permissions.</p>
+                        <button class="btn btn-warning" disabled>Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <p class="stat-text">Vehicles Available</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <div class="stat-number">1000+</div>
+                    <p class="stat-text">Happy Customers</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <p class="stat-text">Support Available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
