@@ -21,7 +21,7 @@
                         <p class="card-text">
                             <strong>Year:</strong> @Model.Car.Year<br>
                             <strong>Seats:</strong> @Model.Car.PassengerSeats<br>
-                            <strong>Price/Day:</strong> $@Model.Car.PricePerDay.ToString("F2")<br>
+                            <strong>Price/Day:</strong>@Model.Car.PricePerDay.ToString("F2")ˆ<br>
                             @if (!string.IsNullOrEmpty(Model.Car.Description))
                             {
                                 <strong>Description:</strong> @Model.Car.Description

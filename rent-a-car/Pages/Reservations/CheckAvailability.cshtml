@@ -76,7 +76,7 @@
                                                 }
 
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <strong class="h6 mb-0">$@car.PricePerDay.ToString("F2")/day</strong>
+                                                    <strong class="h6 mb-0">@car.PricePerDay.ToString("F2")€/day</strong>
                                                     <a asp-page="/Reservations/RequestReservation"
                                                        asp-route-carId="@car.Id"
                                                        asp-route-startDate="@Model.Input.StartDate.ToString("yyyy-MM-dd")"
