@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace rent_a_car.Models
 {
     /// <summary>
-    /// Represents a user in the Rent-a-Car system.
+    /// Represents a user in the Rent a Car system.
     /// Extends the default ASP.NET Identity User with custom properties.
     /// </summary>
     public class User : IdentityUser

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using rent_a_car.Data;
 using rent_a_car.Models;
+using rent_a_car.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,10 @@ builder.Services.AddDefaultIdentity<User>(options =>
     })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<RentACarDbContext>();
+
+// Email Sender Configuration
+builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, SmtpEmailSender>();
 
 // Register services
 builder.Services.AddScoped<rent_a_car.Services.IReservationService, rent_a_car.Services.ReservationService>();
