@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using rent_a_car.Data;
-using rent_a_car.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace rent_a_car.Pages.Cars

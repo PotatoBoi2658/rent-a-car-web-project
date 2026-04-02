@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using rent_a_car.Models;
+using System.Diagnostics;
 
 namespace rent_a_car.Controllers
 {

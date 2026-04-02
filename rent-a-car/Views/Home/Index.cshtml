@@ -46,20 +46,21 @@
             </div>
         </div>
 
-        <!-- Make Reservations -->
+        <!-- Check availability -->
         <div class="col-md-6 col-lg-4">
             <div class="card feature-card">
                 <div class="card-body text-center">
                     <span class="feature-icon">📅</span>
-                    <h5 class="card-title">Make a Reservation</h5>
-                    <p class="card-text">Reserve your perfect car for specific dates with just a few clicks.</p>
+                    <h5 class="card-title">Check availability</h5>
+                    <p class="card-text">Check availability for your perfect car with just a few clicks.</p>
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <a asp-page="/Reservations/Create" class="btn btn-primary">Reserve Now</a>
+                        
+                        <a asp-page="/Reservations/CheckAvailability" class="btn btn-primary">Check now</a>
                     }
                     else
                     {
-                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Login to Reserve</a>
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Login to Check</a>
                     }
                 </div>
             </div>
@@ -124,7 +125,7 @@
                         <span class="feature-icon">👥</span>
                         <h5 class="card-title">User Management</h5>
                         <p class="card-text">Manage user accounts and permissions.</p>
-                        <button class="btn btn-warning" disabled>Coming Soon</button>
+                        <a asp-page="/Users/Index" class="btn btn-warning">Manage Users</a>
                     </div>
                 </div>
             </div>
@@ -136,20 +137,20 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <p class="stat-text">Vehicles Available</p>
+                    <div class="stat-number">Many</div>
+                    <p class="stat-text">Vehicles Available*</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stat-item">
-                    <div class="stat-number">1000+</div>
-                    <p class="stat-text">Happy Customers</p>
+                    <div class="stat-number">2+</div>
+                    <p class="stat-text">Happy Customers*</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stat-item">
                     <div class="stat-number">24/7</div>
-                    <p class="stat-text">Support Available</p>
+                    <p class="stat-text">Support Available*</p>
                 </div>
             </div>
         </div>

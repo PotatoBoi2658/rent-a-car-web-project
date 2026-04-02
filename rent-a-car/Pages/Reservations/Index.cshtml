@@ -2,7 +2,15 @@
 @using rent_a_car.Pages.Reservations
 @model ReservationsIndexModel
 @{
-    ViewData["Title"] = "My Reservations";
+    if (User.IsInRole("Administrator"))
+    {
+        ViewData["Title"] = "Manage Reservations";
+    }
+    else
+    {
+        ViewData["Title"] = "My Reservations";
+    }
+    
 }
 
 <div class="container my-5">

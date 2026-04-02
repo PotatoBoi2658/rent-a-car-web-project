@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-page="/Index">🚗 Rent-a-Car</a>
+                <a class="navbar-brand" asp-page="/Index">🚗 Rent a Car</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,27 +21,33 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Index">Home</a>
-                        </li>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-page="/Cars/Index">Browse Cars</a>
+						</li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Cars/Index">Browse Cars</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Reservations/Index">My Reservations</a>
-                            </li>
-                            @if (User.IsInRole("Administrator"))
+                            if (User.IsInRole("Administrator"))
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Reservations/Index">Manage Reservations</a>
+                                </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Admin
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                        <li><a class="dropdown-item" asp-page="/Users/Index">Manage Users</a></li>
                                         <li><a class="dropdown-item" asp-page="/Cars/Index">Manage Fleet</a></li>
-                                        <li><a class="dropdown-item" asp-page="/Reservations/Index">Manage Reservations</a></li>
                                     </ul>
                                 </li>
                             }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Reservations/Index">My Reservations</a>
+                                </li>
+							}
                         }
                     </ul>
                     <partial name="_LoginPartial" />
@@ -58,12 +64,12 @@
         <div class="container">
             <div class="row py-4">
                 <div class="col-md-6">
-                    <h5>Rent-a-Car</h5>
+                    <h5>Rent a Car</h5>
                     <p>Your trusted partner for hassle-free car rentals.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p>&copy; 2026 - Rent-a-Car</p>
-                    <a asp-page="/Privacy">Privacy Policy</a>
+                    <p>&copy; 2026 - Rent a Car</p>
+                    <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
                 </div>
             </div>
         </div>

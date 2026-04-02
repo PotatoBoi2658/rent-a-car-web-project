@@ -11,24 +11,40 @@
             <h1 class="mb-4">@ViewData["Title"]</h1>
             <div class="card">
                 <div class="card-body">
-                    <form method="post">
+                    <form method="post" id="availabilityForm">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Custom front-end validation message -->
+                        <div id="dateValidationMessage" class="alert alert-danger d-none"></div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="Input.StartDate" class="form-label">Start Date</label>
-                                    <input asp-for="Input.StartDate" class="form-control" type="date" required />
+                                    <input asp-for="Input.StartDate"
+                                           class="form-control"
+                                           type="date"
+                                           required
+                                           min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                           id="startDate" />
                                     <span asp-validation-for="Input.StartDate" class="text-danger"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="Input.EndDate" class="form-label">End Date</label>
-                                    <input asp-for="Input.EndDate" class="form-control" type="date" required />
+                                    <input asp-for="Input.EndDate"
+                                           class="form-control"
+                                           type="date"
+                                           required
+                                           min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                           id="endDate" />
                                     <span asp-validation-for="Input.EndDate" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
+
                         <button type="submit" class="btn btn-primary btn-lg w-100">
                             🔍 Check Availability
                         </button>
@@ -49,16 +65,18 @@
                                                 <h5 class="card-title">@car.FullName</h5>
                                                 <div class="mb-3">
                                                     <small class="text-muted">
-                                                        <strong>Year:</strong> @car.Year | 
+                                                        <strong>Year:</strong> @car.Year |
                                                         <strong>Seats:</strong> @car.PassengerSeats
                                                     </small>
                                                 </div>
+
                                                 @if (!string.IsNullOrEmpty(car.Description))
                                                 {
                                                     <p class="card-text text-muted small">@car.Description</p>
                                                 }
+
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <strong class="h6 mb-0">${@car.PricePerDay.ToString("F2")}/day</strong>
+                                                    <strong class="h6 mb-0">$@car.PricePerDay.ToString("F2")/day</strong>
                                                     <a asp-page="/Reservations/RequestReservation"
                                                        asp-route-carId="@car.Id"
                                                        asp-route-startDate="@Model.Input.StartDate.ToString("yyyy-MM-dd")"
@@ -81,7 +99,9 @@
                     }
                     else
                     {
-                        <p class="text-muted text-center mt-4">Select your desired dates and check availability to see available cars.</p>
+                        <p class="text-muted text-center mt-4">
+                            Select your desired dates and check availability to see available cars.
+                        </p>
                     }
                 </div>
             </div>
@@ -91,4 +111,63 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("availabilityForm");
+            const startDate = document.getElementById("startDate");
+            const endDate = document.getElementById("endDate");
+            const messageBox = document.getElementById("dateValidationMessage");
+
+            function showError(message) {
+                messageBox.textContent = message;
+                messageBox.classList.remove("d-none");
+            }
+
+            function hideError() {
+                messageBox.textContent = "";
+                messageBox.classList.add("d-none");
+            }
+
+            function validateDates() {
+                hideError();
+
+                if (!startDate.value || !endDate.value) {
+                    return true;
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const start = new Date(startDate.value);
+                const end = new Date(endDate.value);
+
+                if (start < today) {
+                    showError("Start date cannot be before today.");
+                    return false;
+                }
+
+                if (end < today) {
+                    showError("End date cannot be before today.");
+                    return false;
+                }
+
+                if (start >= end) {
+                    showError("End date must be after start date.");
+                    return false;
+                }
+
+                return true;
+            }
+
+            startDate.addEventListener("change", validateDates);
+            endDate.addEventListener("change", validateDates);
+
+            form.addEventListener("submit", function (e) {
+                if (!validateDates()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 }

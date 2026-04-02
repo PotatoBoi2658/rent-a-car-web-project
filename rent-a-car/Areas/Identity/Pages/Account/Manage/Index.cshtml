@@ -4,24 +4,91 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
+<div class="container my-5">
+    <h3>@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
+    <div class="row">
+        <div class="col-md-6">
+            <form id="profile-form" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
+                <div class="form-floating mb-3">
+                    <input asp-for="Username" class="form-control" placeholder="Username" disabled />
+                    <label asp-for="Username" class="form-label"></label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.FirstName" class="form-control" placeholder="First name" />
+                    <label asp-for="Input.FirstName" class="form-label">First Name</label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.LastName" class="form-control" placeholder="Last name" />
+                    <label asp-for="Input.LastName" class="form-label">Last Name</label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.EGN" class="form-control" placeholder="EGN" />
+                    <label asp-for="Input.EGN" class="form-label">EGN</label>
+                    <span asp-validation-for="Input.EGN" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone number" />
+                    <label asp-for="Input.PhoneNumber" class="form-label">Phone number</label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Section -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">Delete Account</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Once you delete your account, there is no going back. Please be certain.</p>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                        Delete My Account
+                    </button>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h1 class="modal-title fs-5" id="deleteAccountModalLabel">Confirm Account Deletion</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>⚠️ WARNING:</strong> This action cannot be undone!</p>
+                    <p>Deleting your account will:</p>
+                    <ul>
+                        <li>Permanently remove your profile</li>
+                        <li>Cancel all your reservations</li>
+                        <li>Delete all associated data</li>
+                    </ul>
+                    <p>Are you absolutely sure you want to proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form method="post" asp-page-handler="Delete" style="display:inline">
+                        <button type="submit" class="btn btn-danger">Yes, Delete My Account</button>
+                    </form>
+                </div>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
+        </div>
     </div>
 </div>
 

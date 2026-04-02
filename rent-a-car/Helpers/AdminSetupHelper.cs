@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using rent_a_car.Models;
-
 namespace rent_a_car.Helpers
 {
     /// <summary>

@@ -50,6 +50,20 @@ namespace rent_a_car.Pages.Reservations
             if (!ModelState.IsValid)
                 return Page();
 
+            var today = DateTime.Today;
+
+            if (Input.StartDate < today)
+            {
+                ModelState.AddModelError(nameof(Input.StartDate), "Start date cannot be before today.");
+                return Page();
+            }
+
+            if (Input.EndDate <= today)
+            {
+                ModelState.AddModelError(nameof(Input.EndDate), "End date must be after today.");
+                return Page();
+            }
+
             if (Input.StartDate >= Input.EndDate)
             {
                 ModelState.AddModelError(nameof(Input.EndDate), "End date must be after start date.");
