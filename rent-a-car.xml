@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Rent-a-Car" version="3.0" framework=".NET 8.0">
+
+  <description>
+    Уеб приложение за наемане на автомобили. Потребителите могат да разглеждат
+    налични коли и да правят заявки за наем. Администраторите управляват
+    автопарка, потребителите и одобряват резервациите.
+  </description>
+
+  <technology>
+    <item name="Backend">ASP.NET Core 8.0 Razor Pages</item>
+    <item name="Database">MySQL (Pomelo EF Core 8.0.3)</item>
+    <item name="ORM">Entity Framework Core 8.0.24</item>
+    <item name="Authentication">ASP.NET Core Identity</item>
+    <item name="Email">MailKit 4.15.1 (SMTP)</item>
+    <item name="Frontend">Bootstrap 5, jQuery</item>
+  </technology>
+
+  <models>
+
+    <model name="User">
+      <description>Потребител на системата. Наследява ASP.NET IdentityUser.</description>
+      <fields>
+        <field name="FirstName" type="string" required="true">Собствено име</field>
+        <field name="LastName" type="string" required="true">Фамилно име</field>
+        <field name="EGN" type="string" required="true" unique="true">10-цифрено ЕГН</field>
+        <field name="PhoneNumber" type="string" required="false">Телефонен номер</field>
+        <field name="Email" type="string" required="true" unique="true">Имейл адрес</field>
+        <field name="UserName" type="string" required="true" unique="true">Потребителско име</field>
+        <field name="IsAdmin" type="bool" default="false">Флаг за администратор</field>
+      </fields>
+    </model>
+
+    <model name="Car">
+      <description>Автомобил в автопарка на компанията.</description>
+      <fields>
+        <field name="Id" type="int" primaryKey="true">Идентификатор</field>
+        <field name="Brand" type="string" maxLength="100" required="true">Марка</field>
+        <field name="Model" type="string" maxLength="100" required="true">Модел</field>
+        <field name="Year" type="int" min="1900" max="2100" required="true">Година</field>
+        <field name="PassengerSeats" type="int" min="1" max="20" required="true">Брой места</field>
+        <field name="PricePerDay" type="decimal" min="0.01" max="10000" required="true">Цена на ден</field>
+        <field name="Description" type="string" maxLength="500" required="false">Описание</field>
+      </fields>
+    </model>
+
+    <model name="Reservation">
+      <description>Заявка за наемане на автомобил от потребител.</description>
+      <fields>
+        <field name="Id" type="int" primaryKey="true">Идентификатор</field>
+        <field name="CarId" type="int" foreignKey="Car">Избрана кола</field>
+        <field name="UserId" type="string" foreignKey="User">Потребител</field>
+        <field name="StartDate" type="DateTime" required="true">Начална дата</field>
+        <field name="EndDate" type="DateTime" required="true">Крайна дата</field>
+        <field name="Status" type="string" default="Pending">Статус на заявката</field>
+        <field name="TotalPrice" type="decimal">Обща цена (изчислява се автоматично)</field>
+      </fields>
+      <statuses>
+        <status value="Pending">Чака одобрение от администратор</status>
+        <status value="Approved">Одобрена — колата е резервирана</status>
+        <status value="Rejected">Отхвърлена от администратор</status>
+        <status value="Completed">Приключена резервация</status>
+      </statuses>
+    </model>
+
+  </models>
+
+  <pages>
+
+    <page path="/Cars" access="all">
+      <description>Списък на всички коли в автопарка. Достъпен за всички.</description>
+    </page>
+
+    <page path="/Cars/Create" access="Administrator">
+      <description>Добавяне на нова кола. Само за администратори.</description>
+    </page>
+
+    <page path="/Cars/Edit" access="Administrator">
+      <description>Редактиране на кола. Само за администратори.</description>
+    </page>
+
+    <page path="/Cars/Delete" access="Administrator">
+      <description>Изтриване на кола. Само за администратори.</description>
+    </page>
+
+    <page path="/Reservations" access="authenticated">
+      <description>
+        Потребителите виждат своите резервации.
+        Администраторите виждат всички резервации с таб за Pending заявки.
+      </description>
+    </page>
+
+    <page path="/Reservations/Create" access="authenticated">
+      <description>Създаване на нова резервация — избор на дати и кола.</description>
+    </page>
+
+    <page path="/Reservations/CheckAvailability" access="authenticated">
+      <description>Проверка на свободни коли за даден период.</description>
+    </page>
+
+    <page path="/Reservations/Edit" access="authenticated">
+      <description>Редактиране на резервация (собствена или от администратор).</description>
+    </page>
+
+    <page path="/Reservations/Delete" access="authenticated">
+      <description>Изтриване на резервация (собствена или от администратор).</description>
+    </page>
+
+    <page path="/Users" access="Administrator">
+      <description>Списък на всички потребители. Само за администратори.</description>
+    </page>
+
+    <page path="/Users/Create" access="Administrator">
+      <description>Ръчно създаване на потребител от администратор.</description>
+    </page>
+
+    <page path="/Users/Edit" access="Administrator">
+      <description>Редактиране на потребителски данни.</description>
+    </page>
+
+    <page path="/Users/Delete" access="Administrator">
+      <description>Изтриване на потребител.</description>
+    </page>
+
+    <page path="/Identity/Account/Login" access="all">
+      <description>Вход в системата.</description>
+    </page>
+
+    <page path="/Identity/Account/Register" access="all">
+      <description>Регистрация на нов потребител.</description>
+    </page>
+
+    <page path="/Identity/Account/ForgotPassword" access="all">
+      <description>Забравена парола — изпраща имейл за възстановяване.</description>
+    </page>
+
+  </pages>
+
+  <services>
+
+    <service name="ReservationService" interface="IReservationService">
+      <description>Съдържа цялата бизнес логика за резервациите.</description>
+      <methods>
+        <method name="GetAvailableCarsAsync" returns="List&lt;Car&gt;">
+          Връща коли без одобрени резервации в дадения период.
+        </method>
+        <method name="IsCarAvailableAsync" returns="bool">
+          Проверява дали конкретна кола е свободна за период.
+        </method>
+        <method name="CreateReservationAsync" returns="bool">
+          Валидира и записва нова резервация със статус Pending.
+        </method>
+        <method name="ApproveReservationAsync" returns="bool">
+          Одобрява заявка (само ако е Pending).
+        </method>
+        <method name="RejectReservationAsync" returns="bool">
+          Отхвърля заявка (само ако е Pending).
+        </method>
+        <method name="DeleteReservationAsync" returns="bool">
+          Изтрива резервация по ID.
+        </method>
+        <method name="GetAllReservationsAsync" returns="List&lt;Reservation&gt;">
+          Връща всички резервации (за администратори).
+        </method>
+        <method name="GetUserReservationsAsync" returns="List&lt;Reservation&gt;">
+          Връща резервациите на конкретен потребител.
+        </method>
+        <method name="GetReservationByIdAsync" returns="Reservation">
+          Връща единична резервация по ID.
+        </method>
+      </methods>
+    </service>
+
+    <service name="SmtpEmailSender" interface="IEmailSender">
+      <description>
+        Изпраща имейли чрез SMTP с MailKit. Ако SMTP не е конфигуриран,
+        пропуска изпращането без грешка.
+      </description>
+    </service>
+
+  </services>
+
+  <database>
+    <name>rent_a_car_db</name>
+    <provider>MySQL (Pomelo EF Core)</provider>
+    <tables>
+      <table name="Cars">Автомобили в автопарка</table>
+      <table name="Reservations">Заявки за наем</table>
+      <table name="AspNetUsers">Потребители (Identity)</table>
+      <table name="AspNetRoles">Роли — Administrator, User</table>
+      <table name="AspNetUserRoles">Връзка потребител-роля</table>
+    </tables>
+    <uniqueConstraints>
+      <constraint field="User.EGN">Уникален индекс</constraint>
+      <constraint field="User.UserName">Уникален индекс</constraint>
+      <constraint field="User.Email">Уникален индекс</constraint>
+    </uniqueConstraints>
+  </database>
+
+  <roles>
+    <role name="Administrator">
+      <description>Пълен достъп — управлява коли, потребители и одобрява резервации.</description>
+      <note>Задава се ръчно в базата данни чрез SQL заявка.</note>
+    </role>
+    <role name="User">
+      <description>Разглежда коли и управлява собствените си резервации.</description>
+    </role>
+  </roles>
+
+  <knownIssues>
+    <issue>Полето "Адрес" на потребителя липсва — не е добавено в модела и формите.</issue>
+    <issue>Няма автоматично задаване на статус "Completed" след изтичане на резервацията.</issue>
+    <issue>Няма UI за управление на роли — прави се само през базата данни.</issue>
+  </knownIssues>
+
+</project>
